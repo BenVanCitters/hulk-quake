@@ -1,4 +1,4 @@
-../progs.dat
+./progs_folder/progs.dat
 
 defs.qc
 subs.qc
@@ -8,6 +8,8 @@ ai.qc
 combat.qc
 items.qc
 weapons.qc
+
+hulk.qc
 world.qc
 client.qc
 player.qc
