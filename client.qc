@@ -1117,6 +1117,9 @@ PlayerPostThink
 Called every frame after physics are run
 ================
 */
+
+.float		ohkd_count;
+.float		ohkd_time;
 void() PlayerPostThink =
 {
 
@@ -1148,7 +1151,12 @@ void() PlayerPostThink =
 
 	if (!(self.flags & FL_ONGROUND))
 		self.jump_flag = self.velocity_z;
-
+	if ((self.ohkd_count < 4) && (self.ohkd_time < time)) // 6 == seconds MOTD will display
+	{
+		self.ohkd_time = time + 1;
+		self.ohkd_count = self.ohkd_count + 1;
+		centerprint(self, " === hulk === "); 
+	}
 	CheckPowerups ();
 };
 
