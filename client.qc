@@ -1170,6 +1170,8 @@ called when a player connects to a server
 */
 void() ClientConnect =
 {
+	//this may be as good a hook place as any... :(
+	spawnHulkMode();
 	bprint (self.netname);
 	bprint (" entered the game\n");
 
