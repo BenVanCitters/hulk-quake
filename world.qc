@@ -294,7 +294,8 @@ void() worldspawn =
 
 	precache_model ("progs/v_light.mdl");
 
-
+	//hulk
+	precache_model ("progs/end1.mdl");
 //
 // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
 //
