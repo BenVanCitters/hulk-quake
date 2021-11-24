@@ -1202,6 +1202,51 @@ void() ClientDisconnect =
 	set_suicide_frame ();
 };
 
+
+//takes care of frag count changes for kills
+void(entity targ, entity attacker) adjustFragCount =
+{
+	if (targ.classname == "player")
+	{
+		if (attacker.classname == "teledeath")
+		{
+			attacker.owner.frags = attacker.owner.frags + 1;
+			return;
+		}
+
+		if (attacker.classname == "teledeath2")
+		{
+			targ.frags = targ.frags - 1;
+			return;
+		}
+
+		if (attacker.classname == "player")
+		{
+			if (targ == attacker)
+			{
+				// killed self
+				attacker.frags = attacker.frags - 1;
+			}
+			else if ( (teamplay == 2) && (targ.team > 0)&&(targ.team == attacker.team) )
+			{
+				attacker.frags = attacker.frags - 1;
+			}
+			else
+			{//attacker player killed targ player
+				
+				//only give frags for killing the hulk or or killing while the hulk
+				if((attacker == current_hulk) || (targ == current_hulk))
+					attacker.frags = attacker.frags + 1;
+				
+			}
+		}
+		else
+		{
+			//attacker was world monster or falling
+			targ.frags = targ.frags - 1;			
+		}
+	}
+}
 /*
 ===========
 ClientObituary
@@ -1211,6 +1256,7 @@ called when a player dies
 */
 void(entity targ, entity attacker) ClientObituary =
 {
+	adjustFragCount(targ,attacker);
 	local	float rnum;
 	local	string deathstring, deathstring2;
 	rnum = random();
@@ -1223,8 +1269,6 @@ void(entity targ, entity attacker) ClientObituary =
 			bprint (" was telefragged by ");
 			bprint (attacker.owner.netname);
 			bprint ("\n");
-
-			attacker.owner.frags = attacker.owner.frags + 1;
 			return;
 		}
 
@@ -1234,7 +1278,6 @@ void(entity targ, entity attacker) ClientObituary =
 			bprint (targ.netname);
 			bprint ("'s telefrag\n");
 
-			targ.frags = targ.frags - 1;
 			return;
 		}
 
@@ -1243,7 +1286,6 @@ void(entity targ, entity attacker) ClientObituary =
 			if (targ == attacker)
 			{
 				// killed self
-				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 
 				if (targ.weapon == 64 && targ.waterlevel > 1)
@@ -1269,13 +1311,10 @@ void(entity targ, entity attacker) ClientObituary =
 					deathstring = " loses another friend\n";
 				bprint (attacker.netname);
 				bprint (deathstring);
-				attacker.frags = attacker.frags - 1;
 				return;
 			}
 			else
 			{
-				attacker.frags = attacker.frags + 1;
-
 				rnum = attacker.weapon;
 				if (rnum == IT_AXE)
 				{
@@ -1330,8 +1369,11 @@ void(entity targ, entity attacker) ClientObituary =
 					else
 						deathstring2 = "'s shaft\n";
 				}
+				
+				if(targ == current_hulk){bprint ("The HULK ");}
 				bprint (targ.netname);
 				bprint (deathstring);
+				if(attacker == current_hulk){bprint ("the HULK ");}
 				bprint (attacker.netname);
 				bprint (deathstring2);
 			}
@@ -1339,7 +1381,6 @@ void(entity targ, entity attacker) ClientObituary =
 		}
 		else
 		{
-			targ.frags = targ.frags - 1;
 			bprint (targ.netname);
 
 			// killed by a montser?
