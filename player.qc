@@ -534,7 +534,9 @@ void() PlayerDie =
 
 	if (deathmatch || coop)
 		DropBackpack();
-
+	
+	if(self == current_hulk)
+		DropHulkSigil();
 	self.weaponmodel="";
 	self.view_ofs = '0 0 -8';
 	self.deadflag = DEAD_DYING;
