@@ -23,12 +23,13 @@ void(entity newHulk) setHulk=
 	if(current_hulk)
 		current_hulk.effects = current_hulk.effects - (current_hulk.effects & EF_DIMLIGHT);
 	current_hulk = newHulk;
-	if(current_hulk)
+	if(current_hulk){
 		current_hulk.effects = current_hulk.effects | EF_DIMLIGHT;
-	
-	//show message for players	
-	bprint(current_hulk.netname);
-	bprint(" has become HULK!\n");
+		
+		//show message for players	
+		bprint(current_hulk.netname);
+		bprint(" has become HULK!\n");
+	}
 }
 
 void() hulkThink=
@@ -66,22 +67,25 @@ void() spawnHulkMode =
 
 void() HulkSigilTouch =
 {
+	bprint("HulkSigilTouch....\n");
+	bprint(other.classname);
+	bprint("\n");
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
 		return;
-		
-	setHulk(other);
 	
-	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	
 	stuffcmd (other, "bf\n");
-	self.solid = SOLID_NOT;
-	other.items = other.items | self.items;
-	self.model = string_null;
+	//self.solid = SOLID_NOT;
+	//other.items = other.items | self.items;
+	//self.model = string_null;
 
 	activator = other;	
-	remove(self);				// fire all targets / killtargets
-	self = other;
+	remove(self);
+	
+	setHulk(other);
+	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 };
 
 
@@ -91,21 +95,24 @@ void() DropHulkSigil =
 
 	item = spawn();
 	item.origin = self.origin - '0 0 24';
-
+	item.netname = "HulkSigil";
 	item.velocity_z = 300;
 	item.velocity_x = -100 + (random() * 200);
 	item.velocity_y = -100 + (random() * 200);
 	
-	item.effects = item.effects | EF_DIMLIGHT;
+	//item.items = IT_HULK;
 	item.flags = FL_ITEM;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	setmodel (self, "progs/end1.mdl");
-	setsize (self, '-16 -16 -24', '16 16 32');
+	
+	setsize (item, '-16 -16 0', '16 16 56');
+	setmodel (item, "progs/end1.mdl");
 	item.touch = HulkSigilTouch;
 	item.noise = "weapons/lock4.wav";
-	//should it expire?
-	//item.nextthink = expireTime;	// remove after quad time runs up
-	//item.think = SUB_Remove;
+	item.effects = item.effects | EF_DIMLIGHT;
+	local entity hulk = find (world, classname, "hulk_mode");
+	item.nextthink = hulk.nextthink = time + 30;
+	//should it expire? yes - maybe it landed in the lava
+	item.think = SUB_Remove;
 };
 

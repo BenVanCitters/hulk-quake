@@ -536,7 +536,10 @@ void() PlayerDie =
 		DropBackpack();
 	
 	if(self == current_hulk)
+	{
 		DropHulkSigil();
+		setHulk(0);//equivlent to setting to 'world'
+	}
 	self.weaponmodel="";
 	self.view_ofs = '0 0 -8';
 	self.deadflag = DEAD_DYING;

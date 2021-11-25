@@ -1372,7 +1372,7 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s shaft\n";
 				}
 				
-				if(targ == current_hulk){bprint ("The HULK ");}
+				if(targ == current_hulk){bprint ("HULK LOST! - ");}
 				bprint (targ.netname);
 				bprint (deathstring);
 				if(attacker == current_hulk){bprint ("the HULK ");}
