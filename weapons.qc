@@ -872,6 +872,7 @@ void()	player_rocket1;
 
 void() W_Attack =
 {
+
 	local	float	r;
 
 	if (!W_CheckNoAmmo ())

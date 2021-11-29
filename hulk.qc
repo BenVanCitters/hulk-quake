@@ -8,14 +8,13 @@ entity() findNewHulk=
 	while(find_ent != world)
 	{
 		if(find_ent != current_hulk)
-		{		
-			
+		{
 			//if(find_ent.deadflag == DEAD_NO)
 				return find_ent;
 		}			
 		find_ent = find (find_ent, classname, "player");
 	}
-	return current_hulk;	
+	return current_hulk;
 }
 
 void(entity newHulk) setHulk=
@@ -26,7 +25,9 @@ void(entity newHulk) setHulk=
 	if(current_hulk){
 		current_hulk.effects = current_hulk.effects | EF_DIMLIGHT;
 		
-		//show message for players	
+		//show message for players
+
+		
 		bprint(current_hulk.netname);
 		bprint(" has become HULK!\n");
 	}
@@ -44,7 +45,7 @@ void() hulkThink=
 //creates gametype entity
 void() spawnHulk =
 {
-	bprint("spawnHulk!\n");
+	//bprint("spawnHulk!\n");
 	hulkMode = spawn();
 	hulkMode.classname = "hulk_mode";
 	hulkMode.think = hulkThink;
@@ -55,7 +56,7 @@ void() spawnHulk =
 //maybe even enforce game start requirements
 void() spawnHulkMode =
 {
-	bprint("trying spawnHulk....\n");
+	//bprint("trying spawnHulk....\n");
 	//only create hulk mode if it doesn't already exist
 	local entity hulk = find (world, classname, "hulk_mode");
 	if(hulk)
@@ -67,9 +68,9 @@ void() spawnHulkMode =
 
 void() HulkSigilTouch =
 {
-	bprint("HulkSigilTouch....\n");
-	bprint(other.classname);
-	bprint("\n");
+	//bprint("HulkSigilTouch....\n");
+	//bprint(other.classname);
+	//bprint("\n");
 	if (other.classname != "player")
 		return;
 	if (other.health <= 0)
