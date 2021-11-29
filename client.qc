@@ -1155,7 +1155,7 @@ void() PlayerPostThink =
 	{
 		self.ohkd_time = time + 1;
 		self.ohkd_count = self.ohkd_count + 1;
-		centerprint(self, " === hulk === "); 
+		centerprint(self, "=== hulk ===\n1. the hulk gets points for every kill\n2. kill the hulk and collect the rune to become hulk"); 
 	}
 	CheckPowerups ();
 };
@@ -1372,12 +1372,15 @@ void(entity targ, entity attacker) ClientObituary =
 						deathstring2 = "'s shaft\n";
 				}
 				
-				if(targ == current_hulk){bprint ("HULK LOST! - ");}
-				bprint (targ.netname);
-				bprint (deathstring);
-				if(attacker == current_hulk){bprint ("the HULK ");}
-				bprint (attacker.netname);
-				bprint (deathstring2);
+				if( (targ == current_hulk) || (attacker == current_hulk))
+				{
+					if(targ == current_hulk){bprint ("HULK LOST! - ");}
+					bprint (targ.netname);
+					bprint (deathstring);
+					if(attacker == current_hulk){bprint ("the HULK ");}
+					bprint (attacker.netname);
+					bprint (deathstring2);
+				}
 			}
 			return;
 		}
